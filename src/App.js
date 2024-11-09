@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import HomePage from "./homepage.js";
 import Login from "./login.js";
 import Signup from "./signup.js";
@@ -13,26 +13,26 @@ const App = function () {
     return (
       <div>
         <AppContext.Provider value={{setisUserLogin}}>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route path="" Component={HomePage}>
               <Route path="/login" Component={Login} />
               <Route path="/signup" Component={Signup} />
             </Route>
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
         </AppContext.Provider >
       </div>
     );
   }
   return (
     <div>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="" Component={LoggedUser} />
           <Route path="Connections/:id" Component={Connections}/>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 };
