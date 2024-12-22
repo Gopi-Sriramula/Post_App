@@ -1,0 +1,49 @@
+.spin3{
+     height: 90vh;
+     width: 100%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+.suggestions{
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     gap: 1rem;
+     margin-top: 60px;
+
+}
+.ant-tabs-nav-wrap{
+     padding-left: 0.5rem;
+     width: 100%;
+     z-index: 100;
+     background-color: #111;
+     position: fixed !important;
+     top: 0 !important;
+     left: 0 !important;
+}
+.suggestionsData{
+     color: white;
+     width: 500px;
+     font-size: large;
+     display: flex;
+     justify-content: space-between;
+     button{
+          font-size:inherit ;
+     }
+}
+@media only screen and (max-width:550px){
+     .suggestionsData{
+          width: 90%;
+     }
+}
+@media only screen and (max-width:550px){
+     .suggestionsData{
+          width: 90%;
+          font-size: 1rem;
+          button{
+               font-size:small ;
+          }
+     }
+}

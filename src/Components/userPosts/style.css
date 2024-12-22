@@ -1,0 +1,54 @@
+.postData{
+     border-bottom: 1px solid #fff;
+     display: flex;
+     padding: 0.7rem;
+     flex-direction: column;
+     gap: 1rem;
+     p{
+          font-size: large;
+     }
+}
+.postActions{
+     display: flex;
+     justify-content: flex-end;
+     gap: 1rem;
+     div{
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          span{
+               font-size: 22px;
+          }
+     }
+}
+.posts{
+     color: white;
+     margin: auto;
+     width: 500px;
+}
+@media only screen and (max-width:550px){
+     .posts{
+          color: white;
+          margin: auto;
+          width: 93%;
+     }
+}
+@media only screen and (max-width:450px){
+     .postData{
+          border-bottom: 1px solid #fff;
+          display: flex;
+          padding: 0.7rem;
+          flex-direction: column;
+          gap: 1rem;
+          p{
+               font-size: 1rem;
+          }
+     }
+     .postActions{
+          div{
+               span{
+                    font-size: 18px;
+               }
+          }
+     }
+}

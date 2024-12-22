@@ -1,108 +1,101 @@
-import {
-  legacy_createStore as createStore,
-  applyMiddleware,
-  combineReducers,
-} from "redux";
-import { thunk } from "redux-thunk";
-import { ApiStatus } from "./urls";
-const reducer1 = (
-  state = {
-    login: { apiStatus: "init", key: null },
-    signup: { apiStatus: "init" },
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { status, urls } from "./Urls";
+const reducer1 = createSlice({
+  name: "login&signup_Status",
+  initialState: {
+    loginStatus: { ApiStatus: status.init },
+    signupStatus: { ApiStatus: status.init },
   },
-  action
-) => {
-  switch (action.type) {
-    case "login":
-      state.login = { ...action.payload };
-      return { ...state };
-    case "signup":
-      state.signup = { ...action.payload };
-      return { ...state };
-    default:
-      return state;
-  }
-};
-const reducer2 = (state = { apiStatus: "init", data: null }, action) => {
-  switch (action.type) {
-    case "userInfo": {
-      return { ...action.payload };
-    }
-    case "postAdd":
-      state.data.posts++;
-      return { ...state };
-    default:
-      return state;
-  }
-};
-const reducer3 = (state = { apiStatus: "inti", data: null }, action) => {
-  switch (action.type) {
-    case "postslist": {
-      return { ...action.payload };
-    }
-    case "postAdd":
-      state.data.push(action.payload);
-      return { ...state };
-    default:
-      return state;
-  }
-};
-const reducer4 = (
-  state = { apiStatus: "init", id: undefined, data: null },
-  action
-) => {
-  switch (action.type) {
-    case "comments":
-      return { ...action.payload };
-    default:
-      return state;
-  }
-};
-const reducer5 = (
-  state = {
-    followers: { apiStatus: "init", data: null },
-    following: { apiStatus: "init", data: null },
-    suggesstions: { apiStatus: "init", data: null },
+  reducers: {
+    loginChangeStatus: (state, action) => {
+      state.loginStatus.ApiStatus = action.payload;
+    },
+    signupChangeStatus: (state, action) => {
+      state.signupStatus.ApiStatus = action.payload;
+    },
   },
-  action
-) => {
-  switch (action.type) {
-    case "followers": {
-      state.followers = action.payload;
-      return { ...state };
-    }
-    case "following": {
-      state.following = action.payload;
-      return { ...state };
-    }
-    case "suggesstions": {
-      state.suggesstions = action.payload;
-      return { ...state };
-    }
-    case ApiStatus.success:{
-        const target = state?.suggesstions?.data.find(u=>u._id===action.payload);
-        target.following=!target.following
-        return {...state};
-    }
-    case "updateFollowing":{
-        const target = state?.following?.data.find(u=>u._id===action.payload);
-        target.following=!target.following
-        return {...state};
-    }
-    case "delete":{
-       state.followers={apiStatus:"success",data:state.followers.data.filter(u=>u._id!==action.payload)};
-        return {...state};
-    }
-    default:
-      return state;
-  }
-};
-const reducers = combineReducers({
-  a: reducer1,
-  b: reducer2,
-  c: reducer3,
-  d: reducer4,
-  e: reducer5,
 });
-const store = createStore(reducers, applyMiddleware(thunk));
+const reducer2 = createSlice({
+  name: "loggedUserData",
+  initialState: { ApiStatus: status.init, data: null, bool: false },
+  reducers: {
+    userData: (state, action) => {
+      state.ApiStatus = action.payload.status;
+      state.data = action.payload.data;
+      state.bool = action.payload.bool;
+    },
+    incrementPosts: (state, action) => {
+      state.data.posts++;
+    },
+  },
+});
+const reducer3 = createSlice({
+  name: "postsData",
+  initialState: { ApiStatus: status.init, data: null },
+  reducers: {
+    postsData: (state, action) => {
+      state.ApiStatus = action.payload.status;
+      state.data = action.payload.data;
+    },
+    addNewPost: (state, action) => {
+      state.data.push(action.payload);
+    },
+  },
+});
+const reducer4 = createSlice({
+  name: "commentsData",
+  initialState: { data: {} },
+  reducers: {
+    commentsData: (state, action) => {
+      state.data[action.payload.postId] = {
+        postId: action.payload.postId,
+        ApiStatus: action.payload.ApiStatus,
+        data: action.payload.data,
+      };
+    },
+  },
+});
+const reducer5 = createSlice({
+  name: "connectionsData",
+  initialState: {
+    suggestions: { ApiStatus: status.init, data: null },
+    followers: { ApiStatus: status.init, data: null },
+    following: { ApiStatus: status.init, data: null },
+    requestData:{},
+  },
+  reducers: {
+    suggestionsData: (state, action) => {
+      state.suggestions = action.payload;
+    },
+    followersData: (state, action) => {
+      state.followers = action.payload;
+    },
+    followingData: (state, action) => {
+      state.following = action.payload;
+    },
+    addRequest:(state,action)=>{
+      state.requestData[action.payload.id]=1;
+      const wantedData = action.payload.modify;
+      const target = state[wantedData].data.find(item=>item._id===action.payload.id);
+      target.following=!target.following
+    },
+    removeRequest:(state,action)=>{
+      delete state.requestData[action.payload];
+    }
+  },
+});
+export const { loginChangeStatus, signupChangeStatus } = reducer1.actions;
+export const { userData, incrementPosts } = reducer2.actions;
+export const { postsData, addNewPost } = reducer3.actions;
+export const { commentsData } = reducer4.actions;
+export const { followersData, followingData, suggestionsData,addRequest,removeRequest } =reducer5.actions;
+const store = configureStore({
+  reducer: {
+    a: reducer1.reducer,
+    b: reducer2.reducer,
+    c: reducer3.reducer,
+    d: reducer4.reducer,
+    e: reducer5.reducer,
+  },
+});
 export default store;

@@ -1,39 +1,36 @@
-import { createContext, useContext, useState } from "react";
-import { Routes, Route, HashRouter } from "react-router-dom";
-import HomePage from "./homepage.js";
-import Login from "./login.js";
-import Signup from "./signup.js";
-import LoggedUser from "./loggeduser.js";
-import "./style.css";
-import Connections from "./connections.js"
-export const AppContext = createContext()
+import { HashRouter, Route, Routes } from "react-router-dom";
+import Login from "./Components/Login";
+import "./index.css";
+import SignupPage from "./Pages/SignupPage";
+import { useState } from "react";
+import LoggedUser from "./Pages/LoggedUser";
+import Connections from "./Pages/Connections";
 const App = function () {
-  const [isUserLogin, setisUserLogin] = useState(()=>Boolean(localStorage.getItem("token")));
-  if (!isUserLogin) {
+  const [state, setState] = useState(()=>Boolean(localStorage.getItem("token")));
+  console.log(state)
+  if (!state) {
     return (
       <div>
-        <AppContext.Provider value={{setisUserLogin}}>
         <HashRouter>
           <Routes>
-            <Route path="" Component={HomePage}>
-              <Route path="/login" Component={Login} />
-              <Route path="/signup" Component={Signup} />
-            </Route>
+            <Route path="/" element={<Login setState={setState}/>} />
+            <Route path="/signup" element={<SignupPage />} />
           </Routes>
         </HashRouter>
-        </AppContext.Provider >
       </div>
     );
   }
-  return (
-    <div>
-      <HashRouter>
-        <Routes>
-          <Route path="" Component={LoggedUser} />
-          <Route path="Connections/:id" Component={Connections}/>
-        </Routes>
-      </HashRouter>
-    </div>
-  );
+  else{
+    return (
+      <div>
+        <HashRouter>
+          <Routes>
+            <Route path="/" element={<LoggedUser/>} />
+            <Route path="/connections/:id" element={<Connections/>}/>
+          </Routes>
+        </HashRouter>
+      </div>
+    ); 
+  }
 };
 export default App;
