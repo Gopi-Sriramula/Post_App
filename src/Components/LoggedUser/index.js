@@ -54,15 +54,15 @@ function LoginUser() {
         <button className="material-icons" onClick={()=>setBool(true)}>
           add
         </button>
-        <div className="link">
+        <Link to="/connections/followers" className="link">
           <b>Followers</b>
           <span>{data.followers}</span>
-        </div >
-        <div className="link">
+        </Link >
+        <Link to="/connections/following" className="link">
           <b>Following</b>
           <span>{data.following}</span>
-        </div>
-        <div>
+        </Link>
+        <div className="link">
           <b>Posts</b>
           <span>{data.posts}</span>
         </div>
